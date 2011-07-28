@@ -111,12 +111,16 @@ abstract class AjaxController extends Controller {
  * @access protected
  */
 	protected function _respond($options = array()) {
+		
 		$isAjax = !$this->_disableAjax
 		          && $this->RequestHandler->isAjax()
 		          && $this->RequestHandler->accepts('json');
+		/*
 		if (!$isAjax) {
 			return false;
 		}
+		 * 
+		 */
 
 		$message = $this->Session->read('Message.flash');
 		if ($message) {
@@ -142,10 +146,14 @@ abstract class AjaxController extends Controller {
 			$options['redirect'] = Router::url($options['redirect'], true);
 		}
 
-		Configure::write('debug', 0);
-		header('Content-type: application/json');
+		if ($isAjax) {
+			Configure::write('debug', 0);
+			header('Content-type: application/json');
+		}
 		echo json_encode($options);
 		$this->_stop();
+		
+		
 	}
 
 }
