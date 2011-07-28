@@ -116,7 +116,7 @@ abstract class AjaxController extends Controller {
 		          && $this->RequestHandler->accepts('json'));
 				  
 		if($this->_disableAjax){
-			return false;
+			return false; 
 		}
 
 		$message = $this->Session->read('Message.flash');
