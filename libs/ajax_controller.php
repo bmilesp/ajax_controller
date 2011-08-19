@@ -35,6 +35,7 @@ abstract class AjaxController extends Controller {
  * @return void
  */
 	public function __construct() {
+		
 		if (!in_array('RequestHandler', $this->components)) {
 			$this->components[] = 'RequestHandler';
 		}
@@ -111,11 +112,15 @@ abstract class AjaxController extends Controller {
  * @access protected
  */
 	protected function _respond($options = array()) {
+		$renderAjax = (
+			($this->RequestHandler->isAjax()
+		     && $this->RequestHandler->accepts('json')
+			) 
+			|| $this->RequestHandler->isFlash()
+			|| $this->RequestHandler->isMobile()
+		);
 		
-		$isAjax = ($this->RequestHandler->isAjax()
-		          && $this->RequestHandler->accepts('json'));
-				  
-		if($this->_disableAjax){
+		if($this->_disableAjax || !$renderAjax){
 			return false; 
 		}
 
@@ -142,15 +147,11 @@ abstract class AjaxController extends Controller {
 		if (is_array($options['redirect'])) {
 			$options['redirect'] = Router::url($options['redirect'], true);
 		}
-
-		if ($isAjax) {
-			Configure::write('debug', 0);
-			header('Content-type: application/json');
-		}
+		
+		Configure::write('debug', 0);
+		header('Content-type: application/json');
 		echo json_encode($options);
 		$this->_stop();
-		
-		
 	}
 
 }
