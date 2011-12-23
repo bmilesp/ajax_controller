@@ -112,21 +112,21 @@ abstract class AjaxController extends Controller {
  * @access protected
  */
 	protected function _respond($options = array()) {
-		$renderAjax = (
+		$renderAjax = $this->RequestHandler->isAjax();
+			/*(
 			($this->RequestHandler->isAjax()
 		     && $this->RequestHandler->accepts('json')
 			) 
 			|| $this->RequestHandler->isFlash()
 			|| $this->RequestHandler->isMobile()
-		);
+		);*/
 		
 		if($this->_disableAjax || !$renderAjax){
 			return false; 
 		}
-
-		$message = $this->Session->read('Message.flash');
-		if ($message) {
-			$this->Session->delete('Message.flash');
+		$message = $this->Session->read('Message');
+		if (!empty($message)) {
+			$this->Session->delete('Message');
 		}
 
 		$this->RequestHandler->respondAs('json');
