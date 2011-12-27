@@ -119,8 +119,8 @@ abstract class AjaxController extends Controller {
 			) 
 			|| $this->RequestHandler->isFlash()
 			|| $this->RequestHandler->isMobile()
-		);*/
-		
+		);
+			 */
 		if($this->_disableAjax || !$renderAjax){
 			return false; 
 		}
