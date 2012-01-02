@@ -124,6 +124,7 @@ abstract class AjaxController extends Controller {
 		if($this->_disableAjax || !$renderAjax){
 			return false; 
 		}
+		$this->autoRender = true;
 		$message = $this->Session->read('Message');
 		if (!empty($message)) {
 			$this->Session->delete('Message');
