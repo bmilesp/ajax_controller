@@ -29,6 +29,10 @@ abstract class AjaxController extends Controller {
 	protected $_disableAjax = false;
 
 /**
+ * set this if you want autoRender = false in web view
+ */
+	public $webAutoRender = true;
+/**
  * Object constructor - Adds the RequestHandler and Session
  * components if necessary
  *
@@ -121,9 +125,10 @@ abstract class AjaxController extends Controller {
 			|| $this->RequestHandler->isMobile()
 		);
 			 */
-		if($this->_disableAjax || !$renderAjax){
-			$this->autoRender = false;
-			return false; 
+		if($this->webAutoRender == true){
+			if($this->_disableAjax || !$renderAjax){
+				return false; 
+			}
 		}
 	
 		$this->autoRender = true;
@@ -150,9 +155,12 @@ abstract class AjaxController extends Controller {
 		if (is_array($options['redirect'])) {
 			$options['redirect'] = Router::url($options['redirect'], true);
 		}
-		var_dump($this->autoRender );
-		Configure::write('debug', 0);
-		header('Content-type: application/json');
+		
+
+		if($this->webAutoRender === true || $renderAjax){
+			Configure::write('debug', 0);
+			header('Content-type: application/json');
+		}
 		echo json_encode($options);
 		$this->_stop();
 	}
