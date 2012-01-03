@@ -122,8 +122,10 @@ abstract class AjaxController extends Controller {
 		);
 			 */
 		if($this->_disableAjax || !$renderAjax){
+			$this->autoRender = false;
 			return false; 
 		}
+	
 		$this->autoRender = true;
 		$message = $this->Session->read('Message');
 		if (!empty($message)) {
@@ -148,7 +150,7 @@ abstract class AjaxController extends Controller {
 		if (is_array($options['redirect'])) {
 			$options['redirect'] = Router::url($options['redirect'], true);
 		}
-		
+		var_dump($this->autoRender );
 		Configure::write('debug', 0);
 		header('Content-type: application/json');
 		echo json_encode($options);
